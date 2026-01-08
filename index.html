@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcask Interactive Visualization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="main-header">
+            <div class="header-content">
+                <h1>Bitcask <span class="highlight">Visualizer</span></h1>
+                <p class="subtitle">Interactive demonstration of Log-Structured Key-Value Stores</p>
+            </div>
+            <div class="header-controls">
+                <!-- Future controls like Compact/Merge could go here -->
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Left Panel: Controls & Input -->
+            <section class="panel control-panel">
+                <div class="panel-header">
+                    <h2>Operations</h2>
+                    <p class="panel-desc">Interact with the store. Writes append to the Log; Reads query the KeyDir.</p>
+                </div>
+
+                <div class="operation-card">
+                    <h3>Put / Update</h3>
+                    <form id="putForm" class="control-form">
+                        <div class="input-group">
+                            <label for="putKey">Key</label>
+                            <input type="text" id="putKey" placeholder="e.g. user_1" required autocomplete="off">
+                        </div>
+                        <div class="input-group">
+                            <label for="putValue">Value</label>
+                            <input type="text" id="putValue" placeholder="e.g. { name: 'Alice' }" required autocomplete="off">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Write Data</button>
+                    </form>
+                </div>
+
+                <div class="operation-card">
+                    <h3>Get</h3>
+                    <form id="getForm" class="control-form">
+                        <div class="input-group">
+                            <label for="getKey">Key</label>
+                            <input type="text" id="getKey" placeholder="Enter key to search" required autocomplete="off">
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Retrieve Value</button>
+                    </form>
+                    <div id="getResult" class="result-box hidden"></div>
+                </div>
+
+                <div class="operation-card">
+                    <h3>Delete</h3>
+                    <form id="deleteForm" class="control-form">
+                        <div class="input-group">
+                            <label for="deleteKey">Key</label>
+                            <input type="text" id="deleteKey" placeholder="Enter key to delete" required autocomplete="off">
+                        </div>
+                        <button type="submit" class="btn btn-danger">Delete Key</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Middle Panel: Disk (Log) -->
+            <section class="panel visualization-panel">
+                <div class="panel-header">
+                    <h2>Disk Layout <span class="badge">Log</span></h2>
+                    <p class="panel-desc">Append-only data file. New writes are always added to the end.</p>
+                </div>
+                <div class="visualizer-container" id="diskLogContainer">
+                    <div class="empty-state">Disk is empty</div>
+                    <!-- Log entries will be injected here -->
+                </div>
+            </section>
+
+            <!-- Right Panel: Memory (KeyDir) -->
+            <section class="panel visualization-panel">
+                <div class="panel-header">
+                    <h2>In-Memory <span class="badge">KeyDir</span></h2>
+                    <p class="panel-desc">Hash map pointing to the most recent value position on disk.</p>
+                </div>
+                <div class="visualizer-container" id="keyDirContainer">
+                    <div class="empty-state">KeyDir is empty</div>
+                    <!-- KeyDir entries will be injected here -->
+                </div>
+            </section>
+        </main>
+        
+        <footer class="main-footer">
+            <p>Based on the <a href="https://riak.com/assets/bitcask-intro.pdf" target="_blank">Bitcask Paper</a>. Built for educational purposes.</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
